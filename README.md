@@ -16,7 +16,7 @@ Demo
 
 A demo can be found here : http://labs.nokto.net/php-epub-cleaner/
 
-Please note that every epub files uploaded github for cleaning will be cached on the demo server. This demo should be used for demo purposes only. For production use and commercial files, please install your own version of the application.
+Please note that every epub files uploaded for cleaning will be cached on the demo server. This demo should be used for demo purposes only. For production use and commercial files, please install your own version of the application.
 
 Installation
 ------------
