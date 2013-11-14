@@ -1,15 +1,15 @@
 php-epub-cleaner
 ================
 
-Created by Clément Bourgoin
-Contact : http://nokto.net/
+Created by Clément Bourgoin  
+Contact : http://nokto.net/contact/
 
-This PHP script will :
-1. upload an ePub file on the server
-2. unzip it in a temporary folder
-3. open every .html, .htm or .xhtml files and apply corrections
-4. rezip the folder as an ePub
-5. download the new ePub 
+This PHP script will :  
+1. upload an ePub file on the server  
+2. unzip it in a temporary folder  
+3. open every .html, .htm or .xhtml files and apply corrections  
+4. rezip the folder as an ePub  
+5. download the new ePub  
 
 Demo
 ----
