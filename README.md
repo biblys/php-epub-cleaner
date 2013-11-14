@@ -11,6 +11,12 @@ This PHP script will :
 4. rezip the folder as an ePub
 5. download the new ePub 
 
+Demo
+----
+
+A demo can be found here : http://labs.nokto.net/php-epub-cleaner/
+
+Please note that every epub files uploaded github for cleaning will be cached on the demo server. This demo should be used for demo purposes only. For production use and commercial files, please install your own version of the application.
 
 Installation
 ------------
