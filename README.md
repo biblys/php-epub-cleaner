@@ -4,6 +4,8 @@ php-epub-cleaner
 Created by Clément Bourgoin  
 Contact : http://nokto.net/contact/
 
+En français : http://nokto.net/php-epub-cleaner/
+
 This PHP script will :  
 1. upload an ePub file on the server  
 2. unzip it in a temporary folder  
