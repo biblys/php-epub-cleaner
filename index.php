@@ -3,15 +3,15 @@
 
 	function cleanHTML($html) {
         
-        // Remplace
+        // Replacement
 		$replacements = array(
+            '…' => '...',
 			'align=' => 'class=',
             'name=' => 'id=',
             ' — ' => ' &ndash; ',
             ' —, ' => ' &ndash;, ',
             ' <p>– ' => ' <p>&mdash; ',
-            ' <p>– ' => ' <p>&mdash; ',
-            '…' => '...',
+            ' <p>–... ' => ' <p>&mdash;... ',
             '</em> <em>' => ' ',
             '</strong> <strong>' => ' ',
             ' <em>.' => '<em>.',
@@ -37,10 +37,7 @@
             ' ;' => '&nbsp;;',
             ' €' => '&nbsp;€',
             ' & ' => ' &amp; ',
-            '<p>à' => '<p>À', '<p>â' => '<p>Â', '<p>é' => '<p>É', '<p>è' => '<p>È', '<p>î' => '<p>Î', '<p>ô' => '<p>Ô',
-            '<p><em>à' => '<p><em>À', '<p><em>â' => '<p><em>Â', '<p><em>é' => '<p><em>É', '<p><em>è' => '<p><em>È', '<p><em>î' => '<p><em>Î', '<p><em>ô' => '<p><em>Ô',
-            '. à' => '. À', '. â' => '. Â', '. é' => '. É', '. è' => '. È', '. î' => '. Î', '. ô' => '. Ô',
-            '«&nbsp;à' => '«&nbsp;À', '«&nbsp;â' => '«&nbsp;Â', '«&nbsp;é' => '«&nbsp;É', '«&nbsp;è' => '«&nbsp;È', '«&nbsp;î' => '«&nbsp;Î', '«&nbsp;ô' => '«&nbsp;Ô',
+			'«&nbsp; <em>' => '«&nbsp;<em>',
             '...' => '…',
             '<p>
 	<p>
@@ -49,16 +46,30 @@
 </p>' => '<p><br /></p>',
             '	<p>
 	</p>
-</p>' => '</p>'
+</p>' => '</p>',
+            '<p>
+	 
+</p>' => '<p><br /></p>',
+' style="text-align: center;"' => ' class="center"'
 		);
-		
 		$html = str_replace(array_keys($replacements), $replacements, $html);
         
+		// Accented uppercase characters
+		$la = array("à","â","ä","ç","é","è","ê","ë","î","ï","ô","ö","ù","û","ü"); // lowercase with accents
+		$ua = array("À","Â","Ä","Ç","É","È","Ê","Ë","Î","Ï","Ô","Ö","Ù","Ü","Ü"); // uppercase equivalents
+		foreach($la as $key => $val) { // situation where an uppercase is needed
+			$html = preg_replace("#(<p>)".$val."#","$1".$ua[$key]."",$html);
+			$html = preg_replace("#(<p><em>)".$val."#","$1".$ua[$key]."",$html);
+			$html = preg_replace("#(\. )".$val."#","$1".$ua[$key]."",$html);
+			$html = preg_replace("#(«&nbsp;)".$val."#","$1".$ua[$key]."",$html);
+		}
+		
         // Delete
         $delete = array('<p><br clear="all" /></p>','<br clear="all"/>');
         $html = str_replace($delete,"",$html);
         
         return $html;
+        
     }
 	
 	if($_FILES) {

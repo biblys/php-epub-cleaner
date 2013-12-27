@@ -29,3 +29,10 @@ Customization
 -------------
 
 I've created this script to clean HTML generated with http://word2cleanhtml.com/ according to french typographic rules but you can create your own set of rules by modifying the $replacements array.
+
+
+Changelog
+---------
+
+1.0.1 (27/12/2013)
+- ehanced accented character handling in cleanHTML function
