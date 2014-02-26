@@ -34,5 +34,9 @@ I've created this script to clean HTML generated with http://word2cleanhtml.com/
 Changelog
 ---------
 
+1.1 (26/02/2014)
+- added a correction log
+- various bug fixes
+
 1.0.1 (27/12/2013)
 - ehanced accented character handling in cleanHTML function

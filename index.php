@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <?
+	
+	define('APP_VERSION','1.1');
 
 	function cleanHTML($html) {
-        
+		
         // Replacement
 		$replacements = array(
             '…' => '...',
@@ -52,23 +54,30 @@
 </p>' => '<p><br /></p>',
 ' style="text-align: center;"' => ' class="center"'
 		);
-		$html = str_replace(array_keys($replacements), $replacements, $html);
+		$html = str_replace(array_keys($replacements), $replacements, $html, $count_replaced);
         
 		// Accented uppercase characters
 		$la = array("à","â","ä","ç","é","è","ê","ë","î","ï","ô","ö","ù","û","ü"); // lowercase with accents
 		$ua = array("À","Â","Ä","Ç","É","È","Ê","Ë","Î","Ï","Ô","Ö","Ù","Ü","Ü"); // uppercase equivalents
 		foreach($la as $key => $val) { // situation where an uppercase is needed
-			$html = preg_replace("#(<p>)".$val."#","$1".$ua[$key]."",$html);
-			$html = preg_replace("#(<p><em>)".$val."#","$1".$ua[$key]."",$html);
-			$html = preg_replace("#(\. )".$val."#","$1".$ua[$key]."",$html);
-			$html = preg_replace("#(«&nbsp;)".$val."#","$1".$ua[$key]."",$html);
+			$html = preg_replace("#(<p>)".$val."#","$1".$ua[$key]."",$html,-1,$count_case_1);
+			$html = preg_replace("#(<p><em>)".$val."#","$1".$ua[$key]."",$html,-1,$count_case_2);
+			$html = preg_replace("#(\. )".$val."#","$1".$ua[$key]."",$html,-1,$count_case_3);
+			$html = preg_replace("#(«&nbsp;)".$val."#","$1".$ua[$key]."",$html,-1,$count_case_4);
+			$html = preg_replace("#(<p>&mdash; )".$val."#","$1".$ua[$key]."",$html,-1,$count_case_5); // added in 1.0.2
 		}
+		$count_uppercased = $count_case_1 + $count_case_2 + $count_case_3 + $count_case_4 + $count_case_5;
 		
         // Delete
         $delete = array('<p><br clear="all" /></p>','<br clear="all"/>');
-        $html = str_replace($delete,"",$html);
-        
-        return $html;
+        $html = str_replace($delete,"",$html,$count_deleted);
+		
+        return array(
+			'html' => $html,
+			'replaced' => $count_replaced,
+			'uppercased' => $count_uppercased,
+			'deleted' => $count_deleted
+		);
         
     }
 	
@@ -111,7 +120,9 @@
 			$ext = pathinfo($f["realpath"], PATHINFO_EXTENSION);
 			if($ext == "html" || $ext == "htm" || $ext == "xhtml") { // select HTML files
 				$html = file_get_contents($f["realpath"]);
-				$html = cleanHTML($html);
+				$clean = cleanHTML($html);
+				$html = $clean['html'];
+				$log .= '<li><strong>'.$f["name"].'</strong> : '.$clean['replaced'].' replaced, '.$clean['uppercased'].' uppercased, '.$clean['deleted'].' deleted </li>';
 				fwrite(fopen($f["realpath"], 'w'),$html);
 			}
 		}
@@ -144,18 +155,21 @@
 
 <html>
 	<head>
-		<title>php-epub-cleaner</title>
+		<title>php-epub-cleaner <?=APP_VERSION;?></title>
 	</head>
 
 	<body>
 		
-		<h1>php-epub-cleaner</h1>
+		<h1>php-epub-cleaner <?=APP_VERSION;?></h1>
 		
-		<p>Created by <a href="http://nokto.net/">Clément Bourgoin</a></p>
+		<p>Created by <a href="http://nokto.net/">Cl&eacute;ment Bourgoin</a></p>
 		
 		<p>Please note that every epub files uploaded for cleaning will be cached on the server. This page should be used for demo purposes only. For production use and commercial files, please install your own version of the application. Source and instructions can be found on GitHub : <a href="https://github.com/iwazaru/php-epub-cleaner">Source</a> | <a href="https://raw.github.com/iwazaru/php-epub-cleaner/master/README.md">Readme</a></p>
 		
-		<? if(isset($success)) echo $success; ?>
+		<?php
+			if(isset($success)) echo $success;
+			if(isset($log)) echo '<p>Correction log :</p><ul>'.$log.'</ul>';
+		?>
 		
 		<form method="post" enctype="multipart/form-data" accept="application/epub+zip">
 			<fieldset>
